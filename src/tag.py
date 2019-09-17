@@ -41,18 +41,19 @@ class Tag(Enum):
     OP_MULTIPLICACAO = 26
     OP_SUBTRACAO = 27
     OP_SOMA = 28
+    OP_NEGACAO = 29
 
     # Identificador
-    ID = 29
+    ID = 30
 
     #Especiais
-    AP = 30 #Abre parentesis
-    FP = 31 #Fecha parentesis
-    AC = 32 #Abre chaves
-    FC = 33 #Fecha chaves
-    AT = 34 #Abre Colchetes
-    FT = 35 #Fecha Colchetes
-    STRING = 36
+    AP = 31 #Abre parentesis
+    FP = 32 #Fecha parentesis
+    AC = 33 #Abre chaves
+    FC = 34 #Fecha chaves
+    AT = 35 #Abre Colchetes
+    FT = 36 #Fecha Colchetes
+    STRING = 37
 
     # Numeros
-    NUM = 37
+    NUM = 38

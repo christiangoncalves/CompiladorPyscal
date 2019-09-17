@@ -109,29 +109,17 @@ class Lexer():
                self.ts.addToken("(", Token(Tag.AP, "(", self.n_line, self.n_column))
                return Token(Tag.AP, "(", self.n_line, self.n_column)
             elif (c == ')'):
-               #estado = 22
+               #estado = 23
                self.ts.addToken(")", Token(Tag.FP, ")", self.n_line, self.n_column))
                return Token(Tag.FP, ")", self.n_line, self.n_column)
-            elif (c == '{'):
-               #estado = 22
-               self.ts.addToken("{", Token(Tag.AC, "{", self.n_line, self.n_column))
-               return Token(Tag.AC, "{", self.n_line, self.n_column)
-            elif (c == '}'):
-               #estado = 22
-               self.ts.addToken("}", Token(Tag.AP, "}", self.n_line, self.n_column))
-               return Token(Tag.FC, "}", self.n_line, self.n_column)
             elif (c == '['):
-               #estado = 22
+               #estado = 24
                self.ts.addToken("[", Token(Tag.AT, "[", self.n_line, self.n_column))
                return Token(Tag.AT, "[", self.n_line, self.n_column)
             elif (c == ']'):
-               #estado = 22
+               #estado = 26
                self.ts.addToken("]", Token(Tag.FT, "]", self.n_line, self.n_column))
                return Token(Tag.FT, "]", self.n_line, self.n_column)
-            elif (c == ''):
-               #estado = 22
-               self.ts.addToken("(", Token(Tag.AP, "(", self.n_line, self.n_column))
-               return Token(Tag.AP, "(", self.n_line, self.n_column)
             else:
                self.sinalizaErroLexico("Caractere invalido [" + c + "] na linha " +
                str(self.n_line) + " e coluna " + str(self.n_column))
@@ -142,18 +130,17 @@ class Lexer():
                self.ts.addToken("==", Token(Tag.OP_IGUAL, "==", self.n_line, self.n_column))
                return Token(Tag.OP_IGUAL, "==", self.n_line, self.n_column)
             else:
-               self.sinalizaErroLexico("Caractere invalido [" + c + "] na linha " +
-               str(self.n_line) + " e coluna " + str(self.n_column))
-               return None
+               #CRIAR TAG PARA RECEBE E IMPLEMENTAR!
+               self.ts.addToken("=", Token(Tag.))
          elif(estado == 4):
             if(c == '='):
                #estado = 5
                self.ts.addToken("!=", Token(Tag.OP_DIFERENTE, "!=", self.n_line, self.n_column))
                return Token(Tag.OP_DIFERENTE, "!=", self.n_line, self.n_column)
             else:
-               self.sinalizaErroLexico("Caractere invalido [" + c + "] na linha " +
-               str(self.n_line) + " e coluna " + str(self.n_column))
-               return None
+               #estado = 29
+               self.ts.addToken("!", Token(Tag.OP_NEGACAO, "!", self.n_line, self.n_column))
+               return Token(Tag.OP_NEGACAO, "!", self.n_line, self.n_column)
          elif(estado == 6):
             if(c == '='):
                #estado = 7
