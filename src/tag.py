@@ -45,5 +45,14 @@ class Tag(Enum):
     # Identificador
     ID = 29
 
+    #Especiais
+    AP = 30 #Abre parentesis
+    FP = 31 #Fecha parentesis
+    AC = 32 #Abre chaves
+    FC = 33 #Fecha chaves
+    AT = 34 #Abre Colchetes
+    FT = 35 #Fecha Colchetes
+    STRING = 36
+
     # Numeros
-    NUM = 30
+    NUM = 37
