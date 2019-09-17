@@ -85,9 +85,9 @@ class Lexer():
                lexema += c
                estado = 14
             elif(c == '\"'):
-               estado = 99
+               estado = 27
             elif(c == '#'):
-               estado = 98
+               estado = 18
             elif(c == '/'):
                #estado = 16
                self.ts.addToken("/", Token(Tag.OP_DIVISAO, "/", self.n_line, self.n_column))
@@ -183,13 +183,6 @@ class Lexer():
                self.retornaPonteiro()
                self.ts.addToken(lexema, Token(Tag.NUM, lexema, self.n_line, self.n_column))
                return Token(Tag.NUM, lexema, self.n_line, self.n_column)
-         elif(estado == 99):
-            if(c != '"'):
-               #continua no estado 99
-               lexema += c
-            else:
-               self.ts.addToken(lexema, Token(Tag.STRING, lexema, self.n_line, self.n_column))
-               return Token(Tag.STRING, lexema, self.n_line, self.n_column)
          elif(estado == 14):
             if(c.isalnum()):
                #continua no estado 14
@@ -203,12 +196,32 @@ class Lexer():
                   self.ts.addToken(lexema, token)
 
                return token
-         
-         elif(estado == 98):
+         elif(estado == 18):
             if(c != '\n'):
-               estado = 98 
+               estado = 18 
             else:
                estado = 1
-         
+         elif(estado == 27):
+            if(c.isalpha()):
+               estado = 30
+               lexema += c
+            else:
+               self.sinalizaErroLexico("Caractere invalido [" + c + "] na linha " +
+               str(self.n_line) + " e coluna " + str(self.n_column))
+               return None
+         elif(estado == 30): 
+            if(c.isalpha()):
+               #estado permanece no 30
+               lexema += c
+            elif(c == '\"' ):
+               #estado = 35
+               self.ts.addToken(lexema, Token(Tag.STRING, lexema, self.n_line, self.n_column))
+               return Token(Tag.STRING, lexema, self.n_line, self.n_column)
+            else:
+               self.sinalizaErroLexico("Caractere invalido [" + c + "] na linha " +
+               str(self.n_line) + " e coluna " + str(self.n_column))
+               return None
+
+
          # fim if's de estados
       # fim while
