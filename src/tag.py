@@ -53,7 +53,12 @@ class Tag(Enum):
     FC = 34 #Fecha chaves
     AT = 35 #Abre Colchetes
     FT = 36 #Fecha Colchetes
-    STRING = 37
+    CP = 37 #Atribuição '='
+    VG = 38 #Virgula
+    PV = 39 #Ponto e Virgula
+    DP = 40 #Dois Pontos
+    STRING = 41 
+    
 
     # Numeros
-    NUM = 38
+    NUM = 42
