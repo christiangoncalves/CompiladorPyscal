@@ -1,7 +1,43 @@
-[[[[[[
-   {{{{{{{
-      ((((((
-         
-      ))))))
-   }}}}}}}
-]]]]]]
+class Calculadora:
+
+   def double Soma(double valor1, double valor2):
+      double resultado;
+      resultado = valor1 + valor2;
+      return resultado;
+   end;
+
+   def double Subtracao(double valor1, double valor2):
+      double resultado;
+      resultado = valor1 - valor2;
+      return resultado;
+   end;
+
+   def double Multiplicacao(double valor1, double valor2):
+      integer resultado;
+      resultado = valor1 * valor2;
+      return resultado;
+   end;
+
+   def double Divisao(double valor1, double valor2):
+      integer resultado;
+
+      if (valor2 > 0.00):
+         resultado = valor1 / valor2;
+      else:
+         resultado = Not_A_Number;
+
+      return resultado;
+   end;
+
+   defstatic void main (String[] args):
+      #Imprime tabuada do 5
+      integer contador;
+
+      contador = 0.0;
+
+      while (contador <= 10):
+         write(Multiplicacao(contador, 5));
+         contador = contador + 1;
+      end;
+   end;
+end.

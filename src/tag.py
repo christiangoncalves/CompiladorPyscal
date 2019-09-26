@@ -23,6 +23,7 @@ class Tag(Enum):
     KW_VOID = 11
     KW_MAIN = 12
     KW_END = 13
+    KW_END_P = 45 #END COM PONTO (END.)
     KW_WRITE = 14
     KW_OR = 15
     KW_AND = 16
@@ -57,9 +58,9 @@ class Tag(Enum):
     VG = 38 #Virgula
     PV = 39 #Ponto e Virgula
     DP = 40 #Dois Pontos
-    STRING = 41 
+    STRING = 42
     
 
     # Numeros
-    NUM = 42
-    DOUBLE = 43
+    NUM = 43
+    DOUBLE = 44
