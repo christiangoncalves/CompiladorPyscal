@@ -62,3 +62,4 @@ class Tag(Enum):
 
     # Numeros
     NUM = 42
+    DOUBLE = 43

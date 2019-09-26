@@ -239,11 +239,10 @@ class Lexer():
                #estado permanece no 32 (estado = 32)
                lexema += c
             else:
-               #DEFINIR TAG PARA DOUBLE (CRIA ESPECIFICA OU USA A TAG NUM)
                #estado = 33
                self.retornaPonteiro()
-               self.ts.addToken(lexema, Token(tag., lexema, self.n_line, self.n_column))
-               return Token(tag., lexema, self.n_line, self.n_column)
+               self.ts.addToken(lexema, Token(Tag.DOUBLE, lexema, self.n_line, self.n_column))
+               return Token(Tag.DOUBLE, lexema, self.n_line, self.n_column)
 
 
 
