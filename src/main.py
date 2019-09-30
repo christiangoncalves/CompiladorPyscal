@@ -3,7 +3,7 @@ from token1 import Token
 from lexer import Lexer
 
 if __name__ == "__main__":
-   lexer = Lexer('HelloWorld.txt')
+   lexer = Lexer('HelloPyscal.txt')
 
    print("\n=>Lista de tokens:")
    token = lexer.proxToken()

@@ -209,15 +209,18 @@ class Lexer():
             else:
                estado = 1
          elif(estado == 27):
-            if(c.isalpha()):
+            if(c != '\"'):
                estado = 30
                lexema += c
+            elif(c == '\"'):
+               self.ts.addToken(lexema, Token(Tag.STRING, lexema, self.n_line, self.n_column - len(lexema) - 2))
+               return Token(Tag.STRING, lexema, self.n_line, self.n_column - len(lexema)-2)
             else:
                self.sinalizaErroLexico("Caractere invalido [" + c + "] na linha " +
                str(self.n_line) + " e coluna " + str(self.n_column))
                return None
          elif(estado == 30): 
-            if(c.isalpha()):
+            if(c != '\"'):
                #estado permanece no 30 (estado = 30)
                lexema += c
             elif(c == '\"' ):
