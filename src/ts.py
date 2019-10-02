@@ -21,7 +21,6 @@ class TS:
       self.ts['void'] = Token(Tag.KW_VOID, 'void', 0, 0)
       self.ts['main'] = Token(Tag.KW_MAIN, 'main', 0, 0)
       self.ts['end'] = Token(Tag.KW_END, 'end', 0, 0)
-      self.ts['end.'] = Token(Tag.KW_END_P, 'end.', 0, 0)
       self.ts['write'] = Token(Tag.KW_WRITE, 'write', 0, 0)
       self.ts['or'] = Token(Tag.KW_OR, 'or', 0, 0)
       self.ts['and'] = Token(Tag.KW_AND, 'and', 0, 0)

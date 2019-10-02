@@ -9,10 +9,12 @@
 			writeln("");
 			writeln("Este eh um codigo de exemplo em Pyscal!");
 			writeln("");
-			
+			and;
+			1-1;
+			-1;
 			if(podeEntregarDepois()):
 				writeln("Pode, mas nao tem ponto.");
 			end;
 		end;
 	end.
-			
+

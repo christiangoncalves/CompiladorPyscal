@@ -27,6 +27,7 @@ class Lexer():
          self.n_line = 1
          self.n_column = 1
          self.ts = TS()
+         
       except IOError:
          print('Erro de abertura do arquivo. Encerrando execução!')
          sys.exit(0)
@@ -53,6 +54,9 @@ class Lexer():
       estado = 1
       lexema = ""
       c = '\u0000'
+      token = None
+   
+      
 
       while(True):
          self.lookahead = self.input_file.read(1)
@@ -62,13 +66,15 @@ class Lexer():
          if(c == '\n'):
             self.n_line += 1
             self.n_column = 1
+         elif (c == '\t'):
+            self.n_column += 4
          else:
             self.n_column += 1
          
          if(estado == 1):
             if(c == ''):
                self.ts.addToken("EOF", Token(Tag.EOF, "EOF", self.n_line, self.n_column))
-               return Token(Tag.EOF, "EOF", self.n_line, self.n_column)
+               token = Token(Tag.EOF, "EOF", self.n_line, self.n_column)
             elif(c == ' ' or c == '\t' or c == '\n' or c == '\r'):
                estado = 1
             elif(c == '='):
@@ -89,94 +95,98 @@ class Lexer():
                estado = 27
             elif(c == '#'):
                estado = 18
+            elif(c == '.'):
+               #estado = 16
+               self.ts.addToken(".", Token(Tag.KW_PONTO, ".", self.n_line, self.n_column))
+               token = Token(Tag.KW_PONTO, ".", self.n_line, self.n_column)
             elif(c == '/'):
                #estado = 16
-               self.ts.addToken("/", Token(Tag.OP_DIVISAO, "/", self.n_line, self.n_column-1))
-               return Token(Tag.OP_DIVISAO, "/", self.n_line, self.n_column-1)
+               self.ts.addToken("/", Token(Tag.OP_DIVISAO, "/", self.n_line, self.n_column))
+               token = Token(Tag.OP_DIVISAO, "/", self.n_line, self.n_column)
             elif (c == ','):
                #estado = 17
-               self.ts.addToken(",", Token(Tag.VG, ",", self.n_line, self.n_column-1))
-               return Token(Tag.VG, ",", self.n_line, self.n_column-1)
+               self.ts.addToken(",", Token(Tag.VG, ",", self.n_line, self.n_column))
+               token = Token(Tag.VG, ",", self.n_line, self.n_column)
             elif (c == '*'):
                #estado = 19
-               self.ts.addToken("*", Token(Tag.OP_MULTIPLICACAO, "*", self.n_line, self.n_column-1))
-               return Token(Tag.OP_MULTIPLICACAO, "*", self.n_line, self.n_column-1)
+               self.ts.addToken("*", Token(Tag.OP_MULTIPLICACAO, "*", self.n_line, self.n_column))
+               token = Token(Tag.OP_MULTIPLICACAO, "*", self.n_line, self.n_column)
             elif (c == '+'):
                #estado = 20
-               self.ts.addToken("+", Token(Tag.OP_SOMA, "+", self.n_line, self.n_column-1))
-               return Token(Tag.OP_SOMA, "+", self.n_line, self.n_column-1)
+               self.ts.addToken("+", Token(Tag.OP_SOMA, "+", self.n_line, self.n_column))
+               token = Token(Tag.OP_SOMA, "+", self.n_line, self.n_column)
             elif (c == '-'):
                #estado = 21
-               self.ts.addToken("-", Token(Tag.OP_SUBTRACAO, "-", self.n_line, self.n_column-1))
-               return Token(Tag.OP_SUBTRACAO, "-", self.n_line, self.n_column-1)
+                  self.ts.addToken("-", Token(Tag.OP_SUBTRACAO, "-", self.n_line, self.n_column))
+                  token = Token(Tag.OP_SUBTRACAO, "-", self.n_line, self.n_column)
             elif (c == '('):
                #estado = 22
-               self.ts.addToken("(", Token(Tag.AP, "(", self.n_line, self.n_column-1))
-               return Token(Tag.AP, "(", self.n_line, self.n_column-1)
+               self.ts.addToken("(", Token(Tag.AP, "(", self.n_line, self.n_column))
+               token = Token(Tag.AP, "(", self.n_line, self.n_column)
             elif (c == ')'):
                #estado = 23
-               self.ts.addToken(")", Token(Tag.FP, ")", self.n_line, self.n_column-1))
-               return Token(Tag.FP, ")", self.n_line, self.n_column-1)
+               self.ts.addToken(")", Token(Tag.FP, ")", self.n_line, self.n_column))
+               token = Token(Tag.FP, ")", self.n_line, self.n_column)
             elif (c == '['):
                #estado = 24
-               self.ts.addToken("[", Token(Tag.AT, "[", self.n_line, self.n_column-1))
-               return Token(Tag.AT, "[", self.n_line, self.n_column-1)
+               self.ts.addToken("[", Token(Tag.AT, "[", self.n_line, self.n_column))
+               token = Token(Tag.AT, "[", self.n_line, self.n_column)
             elif (c == ':'):
                #estado = 25
-               self.ts.addToken(":", Token(Tag.DP, ":", self.n_line, self.n_column-1))
-               return Token(Tag.DP, ":", self.n_line, self.n_column-1)
+               self.ts.addToken(":", Token(Tag.DP, ":", self.n_line, self.n_column))
+               token = Token(Tag.DP, ":", self.n_line, self.n_column)
             elif (c == ']'):
                #estado = 26
-               self.ts.addToken("]", Token(Tag.FT, "]", self.n_line, self.n_column-1))
-               return Token(Tag.FT, "]", self.n_line, self.n_column-1)
+               self.ts.addToken("]", Token(Tag.FT, "]", self.n_line, self.n_column))
+               token = Token(Tag.FT, "]", self.n_line, self.n_column)
             elif (c == ';'):
                #estado = 28
-               self.ts.addToken(";", Token(Tag.PV, ";", self.n_line, self.n_column-1))
-               return Token(Tag.PV, ";", self.n_line, self.n_column-1)
+               self.ts.addToken(";", Token(Tag.PV, ";", self.n_line, self.n_column))
+               token = Token(Tag.PV, ";", self.n_line, self.n_column)
             else:
                self.sinalizaErroLexico("Caractere invalido [" + c + "] na linha " +
                str(self.n_line) + " e coluna " + str(self.n_column))
-               return None
+               token = None
          elif(estado == 2):
             if(c == '='):
                #estado = 3
-               self.ts.addToken("==", Token(Tag.OP_IGUAL, "==", self.n_line, self.n_column-1))
-               return Token(Tag.OP_IGUAL, "==", self.n_line, self.n_column-1)
+               self.ts.addToken("==", Token(Tag.OP_IGUAL, "==", self.n_line, self.n_column))
+               token = Token(Tag.OP_IGUAL, "==", self.n_line, self.n_column)
             else:
                #estado = 34
                self.retornaPonteiro()
-               self.ts.addToken("=", Token(Tag.CP, "=", self.n_line, self.n_column-1))
-               return Token(Tag.CP, "=", self.n_line, self.n_column-1)
+               self.ts.addToken("=", Token(Tag.CP, "=", self.n_line, self.n_column))
+               token = Token(Tag.CP, "=", self.n_line, self.n_column)
          elif(estado == 4):
             if(c == '='):
                #estado = 5
-               self.ts.addToken("!=", Token(Tag.OP_DIFERENTE, "!=", self.n_line, self.n_column-2))
-               return Token(Tag.OP_DIFERENTE, "!=", self.n_line, self.n_column-2)
+               self.ts.addToken("!=", Token(Tag.OP_DIFERENTE, "!=", self.n_line, self.n_column))
+               token = Token(Tag.OP_DIFERENTE, "!=", self.n_line, self.n_column)
             else:
                #estado = 29
                self.retornaPonteiro()
-               self.ts.addToken("!", Token(Tag.OP_NEGACAO, "!", self.n_line, self.n_column-1))
-               return Token(Tag.OP_NEGACAO, "!", self.n_line, self.n_column-1)
+               self.ts.addToken("!", Token(Tag.OP_NEGACAO, "!", self.n_line, self.n_column))
+               token = Token(Tag.OP_NEGACAO, "!", self.n_line, self.n_column)
          elif(estado == 6):
             if(c == '='):
                #estado = 7
-               self.ts.addToken("<=", Token(Tag.OP_MENOR_IGUAL, "<=", self.n_line, self.n_column-2))
-               return Token(Tag.OP_MENOR_IGUAL, "<=", self.n_line, self.n_column-2)
+               self.ts.addToken("<=", Token(Tag.OP_MENOR_IGUAL, "<=", self.n_line, self.n_column))
+               token = Token(Tag.OP_MENOR_IGUAL, "<=", self.n_line, self.n_column)
             else:
                #estado = 8
                self.retornaPonteiro()
-               self.ts.addToken("<", Token(Tag.OP_MENOR, "<", self.n_line, self.n_column-1))
-               return Token(Tag.OP_MENOR, "<", self.n_line, self.n_column-1)
+               self.ts.addToken("<", Token(Tag.OP_MENOR, "<", self.n_line, self.n_column))
+               token = Token(Tag.OP_MENOR, "<", self.n_line, self.n_column)
          elif(estado == 9):
             if(c == '='):
                #estado = 10
-               self.ts.addToken(">=", Token(Tag.OP_MAIOR_IGUAL, ">=", self.n_line, self.n_column-2))
-               return Token(Tag.OP_MAIOR_IGUAL, ">=", self.n_line, self.n_column-2)
+               self.ts.addToken(">=", Token(Tag.OP_MAIOR_IGUAL, ">=", self.n_line, self.n_column))
+               token = Token(Tag.OP_MAIOR_IGUAL, ">=", self.n_line, self.n_column)
             else:
                #estado = 11
                self.retornaPonteiro()
-               self.ts.addToken(">", Token(Tag.OP_MAIOR, ">", self.n_line, self.n_column-1))
-               return Token(Tag.OP_MAIOR, ">", self.n_line, self.n_column-1)
+               self.ts.addToken(">", Token(Tag.OP_MAIOR, ">", self.n_line, self.n_column))
+               token = Token(Tag.OP_MAIOR, ">", self.n_line, self.n_column)
          elif(estado == 12):
             if(c.isdigit()):
                #continua no estado 12 (estado = 12)
@@ -187,22 +197,22 @@ class Lexer():
             else:
                #estado = 13
                self.retornaPonteiro()
-               self.ts.addToken(lexema, Token(Tag.NUM, lexema, self.n_line, self.n_column - len(lexema)))
-               return Token(Tag.NUM, lexema, self.n_line, self.n_column - len(lexema))
+               self.ts.addToken(lexema, Token(Tag.NUM, lexema, self.n_line, self.n_column ))
+               token = Token(Tag.NUM, lexema, self.n_line, self.n_column )
          elif(estado == 14):
-            if(c.isalnum() or c == '_' or c == '.'):
+            if(c.isalnum() or c == '_'):
                #continua no estado 14
                lexema += c
             else:
                #estado = 15
                self.retornaPonteiro()
-               token = self.ts.getToken(lexema)        
-               if(token is None):
-                  token = Token(Tag.ID, lexema, self.n_line, self.n_column - len(lexema))
-                  self.ts.addToken(lexema, token)
-                  return token
-               token = Token(self.ts.getToken(lexema).nome, lexema, self.n_line, self.n_column - len(lexema))
-               return token
+               tokenComp = self.ts.getToken(lexema)        
+               if(tokenComp is None):
+                  tokenComp = Token(Tag.ID, lexema, self.n_line, self.n_column )
+                  self.ts.addToken(lexema, tokenComp)
+               else:
+                  tokenComp = Token(self.ts.getToken(lexema).nome, lexema, self.n_line, self.n_column )
+               token = tokenComp
          elif(estado == 18):
             if(c != '\n'):
                estado = 18 
@@ -213,24 +223,24 @@ class Lexer():
                estado = 30
                lexema += c
             elif(c == '\"'):
-               self.ts.addToken(lexema, Token(Tag.STRING, lexema, self.n_line, self.n_column - len(lexema) - 2))
-               return Token(Tag.STRING, lexema, self.n_line, self.n_column - len(lexema)-2)
+               self.ts.addToken(lexema, Token(Tag.STRING, lexema, self.n_line, self.n_column  ))
+               token = Token(Tag.STRING, lexema, self.n_line, self.n_column )
             else:
                self.sinalizaErroLexico("Caractere invalido [" + c + "] na linha " +
                str(self.n_line) + " e coluna " + str(self.n_column))
-               return None
+               token = None
          elif(estado == 30): 
             if(c != '\"'):
                #estado permanece no 30 (estado = 30)
                lexema += c
             elif(c == '\"' ):
                #estado = 35
-               self.ts.addToken(lexema, Token(Tag.STRING, lexema, self.n_line, self.n_column - len(lexema) - 2))
-               return Token(Tag.STRING, lexema, self.n_line, self.n_column - len(lexema)-2)
+               self.ts.addToken(lexema, Token(Tag.STRING, lexema, self.n_line, self.n_column  ))
+               token = Token(Tag.STRING, lexema, self.n_line, self.n_column )
             else:
                self.sinalizaErroLexico("Caractere invalido [" + c + "] na linha " +
                str(self.n_line) + " e coluna " + str(self.n_column))
-               return None
+               token = None
          elif(estado == 31):
             if(c.isdigit()):
                estado = 32
@@ -238,7 +248,7 @@ class Lexer():
             else:
                self.sinalizaErroLexico("Caractere invalido [" + c + "] na linha " +
                str(self.n_line) + " e coluna " + str(self.n_column))
-               return None
+               token = None
          elif(estado == 32):
             if(c.isdigit()):
                #estado permanece no 32 (estado = 32)
@@ -246,11 +256,11 @@ class Lexer():
             else:
                #estado = 33
                self.retornaPonteiro()
-               self.ts.addToken(lexema, Token(Tag.DOUBLE, lexema, self.n_line, self.n_column - len(lexema)))
-               return Token(Tag.DOUBLE, lexema, self.n_line, self.n_column - len(lexema))
+               self.ts.addToken(lexema, Token(Tag.DOUBLE, lexema, self.n_line, self.n_column ))
+               token = Token(Tag.DOUBLE, lexema, self.n_line, self.n_column )
 
-
-
-
+         if (token is not None):
+            return token
          # fim if's de estados
+            
       # fim while

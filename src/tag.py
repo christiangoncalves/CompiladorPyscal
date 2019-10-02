@@ -23,7 +23,7 @@ class Tag(Enum):
     KW_VOID = 11
     KW_MAIN = 12
     KW_END = 13
-    KW_END_P = 45 #END COM PONTO (END.)
+    KW_PONTO = 45
     KW_WRITE = 14
     KW_OR = 15
     KW_AND = 16
