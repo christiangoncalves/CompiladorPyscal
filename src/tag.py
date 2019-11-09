@@ -29,6 +29,8 @@ class Tag(Enum):
     KW_AND = 16
     KW_TRUE = 17
     KW_FALSE = 18
+    KW_RETURN = 45
+    KW_WHILE = 46
 
 
     # Operadores
@@ -58,9 +60,4 @@ class Tag(Enum):
     VG = 38 #Virgula
     PV = 39 #Ponto e Virgula
     DP = 40 #Dois Pontos
-    STRING = 42
     
-
-    # Numeros
-    NUM = 43
-    DOUBLE = 44

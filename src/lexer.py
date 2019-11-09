@@ -197,8 +197,8 @@ class Lexer():
             else:
                #estado = 13
                self.retornaPonteiro()
-               self.ts.addToken(lexema, Token(Tag.NUM, lexema, self.n_line, self.n_column ))
-               token = Token(Tag.NUM, lexema, self.n_line, self.n_column )
+               self.ts.addToken(lexema, Token(Tag.KW_INTEGER, lexema, self.n_line, self.n_column ))
+               token = Token(Tag.KW_INTEGER, lexema, self.n_line, self.n_column )
          elif(estado == 14):
             if(c.isalnum() or c == '_'):
                #continua no estado 14
@@ -223,8 +223,8 @@ class Lexer():
                estado = 30
                lexema += c
             elif(c == '\"'):
-               self.ts.addToken(lexema, Token(Tag.STRING, lexema, self.n_line, self.n_column  ))
-               token = Token(Tag.STRING, lexema, self.n_line, self.n_column )
+               self.ts.addToken(lexema, Token(Tag.KW_STRING, lexema, self.n_line, self.n_column  ))
+               token = Token(Tag.KW_STRING, lexema, self.n_line, self.n_column )
             else:
                self.sinalizaErroLexico("Caractere invalido [" + c + "] na linha " +
                str(self.n_line) + " e coluna " + str(self.n_column))
@@ -235,8 +235,8 @@ class Lexer():
                lexema += c
             elif(c == '\"' ):
                #estado = 35
-               self.ts.addToken(lexema, Token(Tag.STRING, lexema, self.n_line, self.n_column  ))
-               token = Token(Tag.STRING, lexema, self.n_line, self.n_column )
+               self.ts.addToken(lexema, Token(Tag.KW_STRING, lexema, self.n_line, self.n_column  ))
+               token = Token(Tag.KW_STRING, lexema, self.n_line, self.n_column )
             else:
                self.sinalizaErroLexico("Caractere invalido [" + c + "] na linha " +
                str(self.n_line) + " e coluna " + str(self.n_column))
@@ -256,8 +256,8 @@ class Lexer():
             else:
                #estado = 33
                self.retornaPonteiro()
-               self.ts.addToken(lexema, Token(Tag.DOUBLE, lexema, self.n_line, self.n_column ))
-               token = Token(Tag.DOUBLE, lexema, self.n_line, self.n_column )
+               self.ts.addToken(lexema, Token(Tag.KW_DOUBLE, lexema, self.n_line, self.n_column ))
+               token = Token(Tag.KW_DOUBLE, lexema, self.n_line, self.n_column )
 
          if (token is not None):
             return token
