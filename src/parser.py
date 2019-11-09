@@ -416,5 +416,18 @@ class Parser():
             self.Exp4linha()
         elif ()
 
+        ######INCOMPLETO######INCOMPLETO######INCOMPLETO######INCOMPLETO######INCOMPLETO######INCOMPLETO######
 
-            
+    def Exp4Linha(self):
+        # Exp4’ -> "(" RegexExp ")" | ε
+        if (self.eat(Tag.AP)):
+            self.RegexExp()
+            if (not self.eat(Tag.FP)):
+                self.sinalizaErroSintatico("Esperado \")\"; encontrado " + "\""+ self.token.getLexema() + "\"")
+        else:
+            return
+    
+    def OpUnario(self):
+        #OpUnario -> "-" | "!"
+        if (not self.eat(Tag.OP_SUBTRACAO) or not self.eat(Tag.OP_NEGACAO)):
+            self.sinalizaErroSintatico("Esperado \"'-' ou '!'\"; encontrado " + "\""+ self.token.getLexema() + "\"")
