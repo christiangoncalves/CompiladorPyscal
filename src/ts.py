@@ -14,7 +14,7 @@ class TS:
       self.ts['class'] = Token(Tag.KW_CLASS, 'class', 0, 0)
       self.ts['def'] = Token(Tag.KW_DEF, 'def', 0, 0)
       self.ts['defstatic'] = Token(Tag.KW_DEFSTATIC, 'defstatic', 0, 0)
-      self.ts['boll'] = Token(Tag.KW_BOLL, 'boll', 0, 0)
+      self.ts['bool'] = Token(Tag.KW_BOOL, 'bool', 0, 0)
       self.ts['integer'] = Token(Tag.KW_INTEGER, 'integer', 0, 0)
       self.ts['String'] = Token(Tag.KW_STRING, 'String', 0, 0)
       self.ts['double'] = Token(Tag.KW_DOUBLE, 'double', 0, 0)

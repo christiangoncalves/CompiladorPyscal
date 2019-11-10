@@ -1,0 +1,21 @@
+# Teste1
+
+class Teste1:
+   def bool booleanFunction(bool v1):
+      return false;
+   end;
+
+   def void fazNada(String v1):
+   end;
+
+   defstatic void main(String[] args):
+      write("Teste 1:");
+      write("\n");
+			
+      if (booleanFunction(true)):
+         write("N@o entrei aqui.");
+      else:
+         write("Mas aqui &u entrei!");
+      end;
+   end;
+end.			

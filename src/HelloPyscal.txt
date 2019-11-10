@@ -8,7 +8,7 @@
 			writeln("Caros alunos de Compiladores,");
 			writeln("");
 			writeln("Este eh um codigo de exemplo em Pyscal!");
-			writeln("");
+			writeln("")
 			and;
 			1-1;
 			-1;

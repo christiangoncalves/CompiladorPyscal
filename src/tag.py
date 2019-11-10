@@ -16,7 +16,7 @@ class Tag(Enum):
     KW_CLASS = 4
     KW_DEF = 5
     KW_DEFSTATIC = 6
-    KW_BOLL = 7
+    KW_BOOL = 7
     KW_INTEGER = 8
     KW_STRING = 9
     KW_DOUBLE = 10
@@ -44,20 +44,21 @@ class Tag(Enum):
     OP_MULTIPLICACAO = 26
     OP_SUBTRACAO = 27
     OP_SOMA = 28
-    OP_NEGACAO = 29
+    OP_INVERSOR = 29
+    OP_NEGACAO = 30
 
     # Identificador
-    ID = 30
+    ID = 31
 
     #Especiais
-    AP = 31 #Abre parentesis
-    FP = 32 #Fecha parentesis
-    AC = 33 #Abre chaves
-    FC = 34 #Fecha chaves
-    AT = 35 #Abre Colchetes
-    FT = 36 #Fecha Colchetes
-    CP = 37 #Atribuição '='
-    VG = 38 #Virgula
-    PV = 39 #Ponto e Virgula
-    DP = 40 #Dois Pontos
+    AP = 32 #Abre parentesis
+    FP = 33 #Fecha parentesis
+    AC = 34 #Abre chaves
+    FC = 35 #Fecha chaves
+    AT = 36 #Abre Colchetes
+    FT = 37 #Fecha Colchetes
+    CP = 38 #Atribuição '='
+    VG = 39 #Virgula
+    PV = 40 #Ponto e Virgula
+    DP = 41 #Dois Pontos
     
