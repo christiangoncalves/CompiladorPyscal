@@ -2,7 +2,7 @@ import sys
 
 from ts import TS
 from tag import Tag
-from token import Token
+from token1 import Token
 from lexer import Lexer
 
 """
@@ -26,18 +26,20 @@ from lexer import Lexer
 """
 class Parser():
     def __init__(self, lexer):
-      self.lexer = lexer
-      self.token = lexer.proxToken() # Leitura inicial obrigatoria do primeiro simbolo
+        self.lexer = lexer
+        self.token = lexer.proxToken(None) # Leitura inicial obrigatoria do primeiro simbolo
+        self.last_token = None
 
-   def sinalizaErroSintatico(self, message):
-      print("[Erro Sintatico] na linha " + str(self.token.getLinha()) + " e coluna " + str(self.token.getColuna()) + ": ")
-      print(message, "\n")
+    def sinalizaErroSintatico(self, message):
+        print("[Erro Sintatico] na linha " + str(self.token.getLinha()) + " e coluna " + str(self.token.getColuna()) + ": ")
+        print(message, "\n")
 
-   def advance(self):
-      print("[DEBUG] token: ", self.token.toString())
-      self.token = self.lexer.proxToken()
+    def advance(self):
+        print("[DEBUG] token: ", self.token.toString())
+        self.token = self.lexer.proxToken(self.last_token)  
+        self.last_token = self.token
    
-   def skip(self, message):
+    def skip(self, message):
       self.sinalizaErroSintatico(message)
       self.advance()
 
@@ -56,7 +58,7 @@ class Parser():
     # Programa -> Classe EOF
     def Programa(self):
         self.Classe()
-        if (self.token1.getNome() != Tag.EOF):
+        if (self.token.getNome() != Tag.EOF):
             self.sinalizaErroSintatico("Esperado \"EOF\"; encontrado " + "\""+ self.token.getLexema() + "\"")
 
     def Classe(self):
@@ -94,16 +96,16 @@ class Parser():
     
     def ListaFuncaoLinha(self):
         # ListaFuncao’ → Funcao ListaFuncao’ | ε
-        if (self.eat(Tag.KW_DEF)):
-            Funcao()
-            ListaFuncao()
+        if (self.token.getNome() == Tag.KW_DEF):
+            self.Funcao()
+            self.ListaFuncao()
         else:
             return
     
     def Funcao(self):
         # Funcao -> "def" TipoPrimitivo ID "(" ListaArg ")" ":" RegexDeclaraId ListaCmd Retorno "end" ";" 
         if (self.eat(Tag.KW_DEF)):
-            TipoPrimitivo()
+            self.TipoPrimitivo()
             if (not self.eat(Tag.ID)):
                 self.sinalizaErroSintatico("Esperado \"ID\"; encontrado " + "\""+ self.token.getLexema() + "\"")
             
@@ -154,7 +156,7 @@ class Parser():
     def Arg(self):
         # Arg -> TipoPrimitivo ID
         self.TipoPrimitivo()
-        if(not self.eat(Tag.ID))
+        if (not self.eat(Tag.ID)):
             self.sinalizaErroSintatico("Esperado \"ID\"; encontrado " + "\""+ self.token.getLexema() + "\"")
         
     def Retorno():
@@ -187,10 +189,10 @@ class Parser():
             if (not self.eat(Tag.FC)):
                 self.sinalizaErroSintatico("Esperado \"]\"; encontrado " + "\""+ self.token.getLexema() + "\"")
             
-            if (not self.eat(Tag.ID))
+            if (not self.eat(Tag.ID)):
                 self.sinalizaErroSintatico("Esperado \"ID\"; encontrado " + "\""+ self.token.getLexema() + "\"")
 
-             if (not self.eat(Tag.FP)):
+            if (not self.eat(Tag.FP)):
                 self.sinalizaErroSintatico("Esperado \")\"; encontrado " + "\""+ self.token.getLexema() + "\"")
 
             if (not self.eat(Tag.DP)):
@@ -210,8 +212,22 @@ class Parser():
     
     def TipoPrimitivo(self):
         # TipoPrimitivo -> "bool" | "integer" | "String" | "double" | "void"
-        if (not self.eat(Tag.KW_BOLL) or not self.eat(Tag.KW_INTEGER) or not self.eat(Tag.KW_STRING) or not self.eat(Tag.KW_DOUBLE) or not self.eat(Tag.KW_VOID)):
-            self.sinalizaErroSintatico("Esperado \"'boll' ou 'integer' ou 'String' ou 'double' ou 'void'\"; encontrado " + "\""+ self.token.getLexema() + "\"")
+        if (self.token.getNome() == Tag.KW_BOOL):
+            self.eat(Tag.KW_BOOL)
+
+        if (self.token.getNome() == Tag.KW_INTEGER):
+            self.eat(Tag.KW_INTEGER)
+
+        if (self.token.getNome() == Tag.KW_STRING):
+            self.eat(Tag.KW_STRING)
+
+        if (self.token.getNome() == Tag.KW_DOUBLE):
+            self.eat(Tag.KW_DOUBLE)
+            
+        if (self.token.getNome() == Tag.KW_VOID):
+            self.eat(Tag.KW_VOID)
+        else:
+            self.sinalizaErroSintatico("Esperado \"'bool' ou 'integer' ou 'String' ou 'double' ou 'void'\"; encontrado " + "\""+ self.token.getLexema() + "\"")
     
     def ListaCmd(self):
         # ListaCmd -> ListaCmd’ 
@@ -412,12 +428,15 @@ class Parser():
 
     def Exp4(self):
         # Exp4 -> ID Exp4’ | ConstInteger | ConstDouble | ConstString | "true" | "false" | OpUnario Exp4 | "(" Expressao")"
-        if (self.eat(Tag.ID) or self.eat(Tag.OP_SUBTRACAO)):
+        if (self.eat(Tag.ID) or self.eat(Tag.OP_INVERSOR) or self.eat(Tag.OP_NEGACAO)):
             self.Exp4linha()
-        elif ()
-
-        ######INCOMPLETO######INCOMPLETO######INCOMPLETO######INCOMPLETO######INCOMPLETO######INCOMPLETO######
-
+        elif (self.eat(Tag.AP)):
+            self.Expressao()
+            if (not self.eat(Tag.FP)):
+                self.sinalizaErroSintatico("Esperado \")\"; encontrado " + "\""+ self.token.getLexema() + "\"")
+        elif (not self.eat(Tag.KW_INTEGER) or not self.eat(Tag.KW_DOUBLE) or not self.eat(Tag.KW_STRING) or not self.eat(Tag.KW_TRUE) or not self.eat(Tag.KW_FALSE)):
+            self.sinalizaErroSintatico("Esperado \"Constante\"; encontrado " + "\""+ self.token.getLexema() + "\"")
+           
     def Exp4Linha(self):
         # Exp4’ -> "(" RegexExp ")" | ε
         if (self.eat(Tag.AP)):
@@ -429,5 +448,5 @@ class Parser():
     
     def OpUnario(self):
         #OpUnario -> "-" | "!"
-        if (not self.eat(Tag.OP_SUBTRACAO) or not self.eat(Tag.OP_NEGACAO)):
+        if (not self.eat(Tag.OP_INVERSOR) or not self.eat(Tag.OP_NEGACAO)):
             self.sinalizaErroSintatico("Esperado \"'-' ou '!'\"; encontrado " + "\""+ self.token.getLexema() + "\"")
