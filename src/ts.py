@@ -26,6 +26,8 @@ class TS:
       self.ts['and'] = Token(Tag.KW_AND, 'and', 0, 0)
       self.ts['true'] = Token(Tag.KW_TRUE, 'true', 0, 0)
       self.ts['false'] = Token(Tag.KW_FALSE, 'false', 0, 0)
+      self.ts['return'] = Token(Tag.KW_RETURN, 'return', 0, 0)
+      self.ts['.'] = Token(Tag.KW_PONTO, '.', 0, 0)
 
    def getToken(self, lexema):
       token = self.ts.get(lexema)

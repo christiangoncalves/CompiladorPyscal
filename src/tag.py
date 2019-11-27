@@ -29,8 +29,8 @@ class Tag(Enum):
     KW_AND = 16
     KW_TRUE = 17
     KW_FALSE = 18
-    KW_RETURN = 45
-    KW_WHILE = 46
+    KW_RETURN = 46
+    KW_WHILE = 47
 
 
     # Operadores
