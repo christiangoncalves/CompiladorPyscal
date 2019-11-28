@@ -145,7 +145,7 @@ class Parser():
     def ListaArg(self):
         # ListaArg -> Arg ListaArg’
         self.Arg()
-        self.ListaArgLinha
+        self.ListaArgLinha()
     
     def ListaArgLinha(self):
         # ListaArg’ -> "," ListaArg | ε 
@@ -258,9 +258,9 @@ class Parser():
         
     def CmdAtribFunc(self):
         # CmdAtribFunc -> CmdAtribui | CmdFuncao
-        if (self.token.getNome == Tag.CP):
+        if (self.token.getNome() == Tag.CP):
             self.CmdAtribui()
-        elif (self.token.getNome == Tag.AP):
+        elif (self.token.getNome() == Tag.AP):
             self.CmdFuncao()
         else:
             self.sinalizaErroSintatico("Esperado \"'=' ou '('\"; encontrado " + "\""+ self.token.getLexema() + "\"")
@@ -274,7 +274,7 @@ class Parser():
 
             if (not self.eat(Tag.FP)):
                 self.sinalizaErroSintatico("Esperado \")\"; encontrado " + "\""+ self.token.getLexema() + "\"")
-            elif (self.eat(Tag.DP)):
+            elif (not self.eat(Tag.DP)):
                 self.sinalizaErroSintatico("Esperado \":\"; encontrado " + "\""+ self.token.getLexema() + "\"")
             
             self.ListaCmd()
@@ -362,11 +362,13 @@ class Parser():
 
     def RegexExp(self):
         # RegexExp → Expressao RegexExp’ | ε
-        if (not(self.eat(Tag.KW_INTEGER) or self.eat(Tag.KW_DOUBLE) or self.eat(Tag.KW_STRING) or self.eat(Tag.KW_TRUE) or self.eat(Tag.KW_FALSE))):
+        #Exp4 -> ID Exp4’ | ConstInteger | ConstDouble | ConstString | "true" | "false" | OpUnario Exp4 | "(" Expressao")"
+        if ((self.token.getNome() == Tag.ID) or (self.token.getNome() == Tag.OP_INVERSOR) or (self.token.getNome() == Tag.OP_NEGACAO) or (self.token.getNome() == Tag.AP) or (self.token.getNome() == Tag.KW_INTEGER) or (self.token.getNome() == Tag.KW_DOUBLE) or (self.token.getNome() == Tag.KW_STRING) or (self.token.getNome() == Tag.KW_TRUE) or (self.token.getNome() == Tag.KW_FALSE)):
             self.Expressao()
             self.RegexExpLinha()
         else:
             return
+
     
     def RegexExpLinha(self):
         # RegexExp’ → "," Expressao RegexExp’ | ε
