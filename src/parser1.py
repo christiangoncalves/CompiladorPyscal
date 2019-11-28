@@ -245,14 +245,14 @@ class Parser():
 
     def Cmd(self):
         # Cmd -> CmdIF | CmdWhile | ID CmdAtribFunc | CmdWrite
-        if (self.token.getNome == Tag.KW_IF):
-            self.CmdIf()
-        elif (self.token.getNome == Tag.KW_WHILE):
+        if (self.token.getNome() == Tag.KW_IF):
+            self.CmdIF()
+        elif (self.token.getNome() == Tag.KW_WHILE):
             self.CmdWhile()
-        elif (self.token.getNome == Tag.ID):
+        elif (self.token.getNome() == Tag.ID):
             self.CmdAtribFunc()
-        elif (self.token.getNome == Tag.KW_WRITE):
-            self.CmdWrite
+        elif (self.token.getNome() == Tag.KW_WRITE):
+            self.CmdWrite()
         else:
             self.sinalizaErroSintatico("Esperado \"'if' ou 'while' ou 'ID' ou 'write'\"; encontrado " + "\""+ self.token.getLexema() + "\"")
         
@@ -362,7 +362,7 @@ class Parser():
 
     def RegexExp(self):
         # RegexExp → Expressao RegexExp’ | ε
-        if (self.eat(Tag.ID)):
+        if (not(self.eat(Tag.KW_INTEGER) or self.eat(Tag.KW_DOUBLE) or self.eat(Tag.KW_STRING) or self.eat(Tag.KW_TRUE) or self.eat(Tag.KW_FALSE))):
             self.Expressao()
             self.RegexExpLinha()
         else:
@@ -431,7 +431,7 @@ class Parser():
     def Exp4(self):
         # Exp4 -> ID Exp4’ | ConstInteger | ConstDouble | ConstString | "true" | "false" | OpUnario Exp4 | "(" Expressao")"
         if (self.eat(Tag.ID) or self.eat(Tag.OP_INVERSOR) or self.eat(Tag.OP_NEGACAO)):
-            self.Exp4linha()
+            self.Exp4Linha()
         elif (self.eat(Tag.AP)):
             self.Expressao()
             if (not self.eat(Tag.FP)):
