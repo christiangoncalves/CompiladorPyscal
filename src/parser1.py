@@ -30,6 +30,10 @@ class Parser():
         self.token = lexer.proxToken(None) # Leitura inicial obrigatoria do primeiro simbolo
         self.last_token = None
 
+    def sinalizaErroSemantico(self, message):
+      print("[Erro Semantico] na linha " + str(self.token.getLinha()) + " e coluna " + str(self.token.getColuna()) + ": ")
+      print(message, "\n")
+
     def sinalizaErroSintatico(self, message):
         print("[Erro Sintatico] na linha " + str(self.token.getLinha()) + " e coluna " + str(self.token.getColuna()) + ": ")
         print(message, "\n")
@@ -87,7 +91,7 @@ class Parser():
         self.TipoPrimitivo()
         if (self.eat(Tag.ID)):
             if (not self.eat(Tag.PV)):
-                self.sinalizaErroSintatico("Esperado \";\"; encontrado " + "\""+ self.token.getLexema() + "\"")
+                self.sinalizaErroSintatico("Esperado \" ; \"; encontrado " + "\""+ self.token.getLexema() + "\"")
         else:
             self.sinalizaErroSintatico("Esperado \"ID\"; encontrado " + "\""+ self.token.getLexema() + "\"")
     
@@ -249,7 +253,7 @@ class Parser():
             self.CmdIF()
         elif (self.token.getNome() == Tag.KW_WHILE):
             self.CmdWhile()
-        elif (self.token.getNome() == Tag.ID):
+        elif (self.eat(Tag.ID)):
             self.CmdAtribFunc()
         elif (self.token.getNome() == Tag.KW_WRITE):
             self.CmdWrite()

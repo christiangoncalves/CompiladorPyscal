@@ -4,7 +4,7 @@ from lexer import Lexer
 from parser1 import Parser
 
 if __name__ == "__main__":
-      lexer = Lexer("C:\\Users\\chris\\Desktop\\Compilador\\CompiladorPyscal\\src\\HelloPyscal.txt")
+      lexer = Lexer("C:\\Users\\chris\\Desktop\\Compilador\\CompiladorPyscal\\src\\teste1.pys")
       parser = Parser(lexer)
 
       parser.Programa()

@@ -5,12 +5,11 @@
 		end;
 
 		defstatic void main(String[] args):
-			writeln("Caros alunos de Compiladores,");
-			writeln("");
-			writeln("Este eh um codigo de exemplo em Pyscal!");
-			writeln("")
-			and;
-			1-1;
+			write("Caros alunos de Compiladores,");
+			write("b");
+			write("Este eh um codigo de exemplo em Pyscal!");
+			write("a");
+			a = 1-1;
 			-1;
 			if(podeEntregarDepois()):
 				writeln("Pode, mas nao tem ponto.");
