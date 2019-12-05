@@ -1,3 +1,5 @@
+from tag import Tag
+
 class Token:
    '''
    Classe que representa um token
@@ -7,12 +9,19 @@ class Token:
       self.lexema = lexema
       self.linha = linha
       self.coluna = coluna
+      self.tipo = Tag.TIPO_VAZIO
 
    def getNome(self):
       return self.nome
 
    def getLexema(self):
       return self.lexema
+      
+   def getTipo(self):
+      return self.tipo
+
+   def setTipo(self, tipo):
+      self.tipo = tipo
 
    def getLinha(self):
       return self.linha
@@ -28,3 +37,4 @@ class Token:
 
    def toString(self):
       return "<" + str(self.nome.name) + ", \"" + str(self.lexema) + "\">"
+      
