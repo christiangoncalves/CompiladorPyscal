@@ -9,8 +9,6 @@ class Teste1:
    end;
 
    defstatic void main(String[] args):
-      integer a;
-      a = 0;
       write("Teste 1:");
       write("\n");
       

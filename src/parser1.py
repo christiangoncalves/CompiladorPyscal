@@ -1,4 +1,5 @@
 import sys
+import copy
 
 from ts import TS
 from tag import Tag
@@ -30,6 +31,7 @@ class Parser():
         self.lexer = lexer
         self.token = lexer.proxToken(None) # Leitura inicial obrigatoria do primeiro simbolo
         self.last_token = None
+        self.ts = TS()
         if self.token is None: # erro no Lexer
             sys.exit(0)
 
@@ -100,15 +102,12 @@ class Parser():
             
     def DeclaraID(self):
         # DeclaraID -> TipoPrimitivo ID ";"
-        tempToken = copy.copy(self.token) # armazena token corrente (necessario para id da regra)
-
         noTipoPrimitivo = self.TipoPrimitivo()
 
+        tempToken = copy.copy(self.token) # armazena token corrente (necessario para id da regra)
+
         if (self.eat(Tag.ID)):
-            self.lexer.ts.removeToken(tempToken.getLexema())
-            tempToken.setTipo(noTipoPrimitivo.tipo)
-            self.lexer.ts.addToken(tempToken.getLexema(), tempToken)
-            
+            self.ts.setTipo(tempToken.getLexema(), noTipoPrimitivo.tipo)            
             if (not self.eat(Tag.PV)):
                 self.sinalizaErroSintatico("Esperado \" ; \"; encontrado " + "\""+ self.token.getLexema() + "\"")
                 sys.exit(0)
@@ -266,39 +265,36 @@ class Parser():
     
     def TipoPrimitivo(self):
         # TipoPrimitivo -> "bool" | "integer" | "String" | "double" | "void"
-        noTipoPrimitivo = no()
+        noTipoPrimitivo = No()
         if (self.token.getNome() == Tag.KW_BOOL):
             self.eat(Tag.KW_BOOL)
 
             noTipoPrimitivo.tipo = Tag.TIPO_LOGICO
-            return noTipoPrimitivo
-
+            
         elif (self.token.getNome() == Tag.KW_INTEGER):
             self.eat(Tag.KW_INTEGER)
 
             noTipoPrimitivo.tipo = Tag.TIPO_INT
-            return noTipoPrimitivo
-
+            
         elif (self.token.getNome() == Tag.KW_STRING):
             self.eat(Tag.KW_STRING)
 
             noTipoPrimitivo.tipo = Tag.TIPO_STRING
-            return noTipoPrimitivo
-
+            
         elif (self.token.getNome() == Tag.KW_DOUBLE):
             self.eat(Tag.KW_DOUBLE)
 
             noTipoPrimitivo.tipo = Tag.TIPO_DOUBLE
-            return noTipoPrimitivo
-
+            
         elif (self.token.getNome() == Tag.KW_VOID):
             self.eat(Tag.KW_VOID)
 
             noTipoPrimitivo.tipo = Tag.TIPO_VAZIO
-            return noTipoPrimitivo
-
+            
         else:
             self.sinalizaErroSintatico("Esperado \"'bool' ou 'integer' ou 'String' ou 'double' ou 'void'\"; encontrado " + "\""+ self.token.getLexema() + "\"")
+        
+        return noTipoPrimitivo
     
     def ListaCmd(self):
         # ListaCmd -> ListaCmd’ 
@@ -490,14 +486,12 @@ class Parser():
 
     def RegexExp(self):
         # RegexExp → Expressao RegexExp’ | ε
-        #Exp4 -> ID Exp4’ | ConstInteger | ConstDouble | ConstString | "true" | "false" | OpUnario Exp4 | "(" Expressao")"
         if ((self.token.getNome() == Tag.ID) or (self.token.getNome() == Tag.OP_INVERSOR) or (self.token.getNome() == Tag.OP_NEGACAO) or (self.token.getNome() == Tag.AP) or (self.token.getNome() == Tag.KW_INTEGER) or (self.token.getNome() == Tag.KW_DOUBLE) or (self.token.getNome() == Tag.KW_STRING) or (self.token.getNome() == Tag.KW_TRUE) or (self.token.getNome() == Tag.KW_FALSE)):
             self.Expressao()
             self.RegexExpLinha()
         else:
             return
-
-    
+ 
     def RegexExpLinha(self):
         # RegexExp’ → "," Expressao RegexExp’ | ε
         if (self.eat(Tag.VG)):
@@ -506,26 +500,22 @@ class Parser():
         else:
             return
 
-    def Expressao(self): #ERRO ERRO ERRO ERRO ERRO ERRO ERRO ERRO ERRO
+    def Expressao(self): 
         # Expressao -> Exp1 Exp’ 
-        #ERRO ERRO ERRO ERRO ERRO ERRO ERRO ERRO ERRO
+        
         noExpressao = No()
-
-        #ERRO ERRO ERRO ERRO ERRO ERRO ERRO ERRO ERRO
 
         noExp1 = self.Exp1()
         noExpLinha = self.ExpLinha()
 
-        #ERRO ERRO ERRO ERRO ERRO ERRO ERRO ERRO ERRO
-
         if (noExpLinha.tipo == Tag.TIPO_VAZIO):
-            noExpLinha.tipo = noExp1.tipo
+            noExpressao.tipo = noExp1.tipo
         
-        #ERRO ERRO ERRO ERRO ERRO ERRO ERRO ERRO ERRO
+        elif (noExpLinha.tipo == noExp1.tipo and noExpLinha.tipo == Tag.TIPO_LOGICO):
+            noExpressao.tipo = Tag.TIPO_LOGICO
         
-        elif (noExpLinha.tipo == noExp1.tipo and ):
-
-        #ERRO ERRO ERRO ERRO ERRO ERRO ERRO ERRO ERRO
+        else:
+            noExpressao.tipo = Tag.TIPO_ERRO
 
         return noExpressao
     
@@ -712,42 +702,46 @@ class Parser():
                 self.sinalizaErroSemantico("Erro, ID nao declado")
                 sys.exit(0)
             
-            return noExp4
-    
-        elif (self.eat(Tag.OP_INVERSOR) or self.eat(Tag.OP_NEGACAO)):
-            noExp4Filho = self.Exp4()
-            
 
+        elif (self.token.getNome() == Tag.OP_INVERSOR or self.token.getNome() == Tag.OP_NEGACAO):
+            noOpUnario = self.OpUnario()
+            noExp4Filho = self.Exp4()
+
+            if (noExp4Filho.tipo == noOpUnario.tipo and noOpUnario.tipo == Tag.TIPO_INT):
+                noExp4Filho.tipo = Tag.TIPO_INT
+
+            elif (noExp4Filho.tipo == noOpUnario.tipo and noOpUnario.tipo == Tag.TIPO_DOUBLE):
+                noExp4Filho.tipo = Tag.TIPO_DOUBLE
+
+            elif (noExp4Filho.tipo == noOpUnario.tipo and noOpUnario.tipo == Tag.TIPO_LOGICO):
+                noExp4Filho.tipo = Tag.TIPO_LOGICO
+            
         elif (self.eat(Tag.AP)):
             noExpressao = self.Expressao()
             if (not self.eat(Tag.FP)):
                 self.sinalizaErroSintatico("Esperado \")\"; encontrado " + "\""+ self.token.getLexema() + "\"")
                 sys.exit(0)
             noExp4.tipo = noExpressao.tipo
-            return noExp4
         
         elif (self.eat(Tag.KW_INTEGER)):
             noExp4.tipo = Tag.TIPO_INT
-            return noExp4
         
         elif (self.eat(Tag.KW_DOUBLE)):
             noExp4.tipo = Tag.TIPO_DOUBLE
-            return noExp4
 
         elif (self.eat(Tag.KW_STRING)):
             noExp4.tipo = Tag.TIPO_STRING
-            return noExp4
 
-        elif (self.eat(Tag.KW_TRUE) or elf.eat(Tag.KW_FALSE)):
+        elif (self.eat(Tag.KW_TRUE) or self.eat(Tag.KW_FALSE)):
             noExp4.tipo = Tag.TIPO_LOGICO
-            return noExp4
 
         else:            
-            self.sinalizaErroSintatico(" Esperado \"'ID' ou 'operador unario' ou 'Constante' ou '(' \"; encontrado " + "\""+ self.token.getLexema() + "\"")
+            self.sinalizaErroSintatico(" Esperado \"'ID' ou 'Constante' ou '(' \"; encontrado " + "\""+ self.token.getLexema() + "\"")
             sys.exit(0)
 
+        return noExp4
 
-    def Exp4Linha(self):
+    def Exp4Linha(self):    
         # Exp4’ -> "(" RegexExp ")" | ε
         if (self.eat(Tag.AP)):
             self.RegexExp()
@@ -759,6 +753,15 @@ class Parser():
     
     def OpUnario(self):
         #OpUnario -> "-" | "!"
-        if (not self.eat(Tag.OP_INVERSOR) or not self.eat(Tag.OP_NEGACAO)):
+        noOpUnario = No()
+        if (self.eat(Tag.OP_INVERSOR)):
+            noOpUnario.tipo = Tag.TIPO_LOGICO
+
+        elif (self.eat(Tag.OP_NEGACAO)):
+            noOpUnario.tipo = Tag.TIPO_INT
+
+        else:
             self.sinalizaErroSintatico("Esperado \"'-' ou '!'\"; encontrado " + "\""+ self.token.getLexema() + "\"")
             sys.exit(0)
+        
+        return noOpUnario
